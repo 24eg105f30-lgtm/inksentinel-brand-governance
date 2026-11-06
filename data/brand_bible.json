@@ -1,0 +1,54 @@
+{
+  "brand_name": "Inkloom AI",
+  "version": "2.4.0",
+  "last_updated": "2026-10-15",
+  "persona": {
+    "tone": "Authoritative yet approachable, concise, technically rigorous, empathetic",
+    "forbidden_tones": ["Hyperbolic/Salesy", "Overly casual/slang", "Sarcastic", "Pessimistic"]
+  },
+  "guideline_clauses": [
+    {
+      "rule_id": "SEC-GOV-04",
+      "category": "UNSUBSTANTIATED_CLAIM",
+      "clause": "Brand Bible §4.2: Absolute security claims (e.g. '100% hack-proof', 'completely unbreachable') are strictly prohibited without documented third-party cryptanalytic audit certification.",
+      "severity": "CRITICAL"
+    },
+    {
+      "rule_id": "PRC-GOV-01",
+      "category": "OUTDATED_SPEC",
+      "clause": "Brand Bible §2.1: Legacy pricing tiers ($19/mo Starter) were deprecated on Q3 2026. All active marketing must quote the unified v2 pricing ($29/mo Growth).",
+      "severity": "HIGH"
+    },
+    {
+      "rule_id": "TONE-GOV-03",
+      "category": "TONE_DRIFT",
+      "clause": "Brand Bible §1.3: External enterprise publications must maintain professional, clear language. Slang, colloquial filler (e.g., 'super dope', 'cuz', 'stuff'), and exaggerated sales jargon are prohibited.",
+      "severity": "MEDIUM"
+    },
+    {
+      "rule_id": "VIS-GOV-02",
+      "category": "VISUAL_ACCESSIBILITY",
+      "clause": "Brand Bible §5.1: All visual graphics and marketing text must strictly comply with WCAG 2.1 AA standards (minimum contrast ratio of 4.5:1 for body copy and 3.0:1 for large text).",
+      "severity": "CRITICAL"
+    },
+    {
+      "rule_id": "TRD-GOV-05",
+      "category": "TRADEMARK_VIOLATION",
+      "clause": "Brand Bible §3.4: The retired product name 'Inkloom Classic' was officially renamed to 'Inkloom Pro'. Using the legacy trademark token is prohibited in active materials.",
+      "severity": "HIGH"
+    },
+    {
+      "rule_id": "PERF-GOV-02",
+      "category": "UNSUBSTANTIATED_CLAIM",
+      "clause": "Brand Bible §4.5: Unsubstantiated speed or performance superlatives (e.g. '#1 fastest platform globally') violate ASA and FTC guidelines without audited benchmark substantiation.",
+      "severity": "HIGH"
+    }
+  ],
+  "approved_colors": [
+    { "name": "Deep Indigo (Primary)", "hex": "#1E1B4B" },
+    { "name": "Brand Violet (Accent)", "hex": "#4338CA" },
+    { "name": "Slate Neutral (Dark)", "hex": "#0F172A" },
+    { "name": "Accessible Body Text", "hex": "#4A5568" },
+    { "name": "Background Off-White", "hex": "#F8FAFC" }
+  ]
+}

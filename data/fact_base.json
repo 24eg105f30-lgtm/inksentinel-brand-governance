@@ -1,0 +1,34 @@
+{
+  "entity": "Inkloom AI Inc.",
+  "dataset_version": "2026.Q4",
+  "approved_facts": [
+    {
+      "fact_id": "SEC-104",
+      "category": "SECURITY",
+      "verified_assertion": "Engineered with SOC-2 Type II certified access controls, role-based authorization, and AES-256 data encryption at rest.",
+      "permitted_phrasing": ["SOC-2 Type II certified", "AES-256 encryption", "multi-layered enterprise security controls"],
+      "banned_phrasing": ["100% hack-proof", "completely unbreachable", "zero-risk security", "bulletproof"]
+    },
+    {
+      "fact_id": "PRC-201",
+      "category": "PRICING",
+      "verified_assertion": "Growth Tier subscription is $29/month billed annually ($35/month billed monthly) including full API access and unlimited guideline validations.",
+      "permitted_phrasing": ["$29/month Growth plan", "starting at $29/mo", "flexible annual billing"],
+      "banned_phrasing": ["$19/month", "free forever enterprise", "lowest price in industry"]
+    },
+    {
+      "fact_id": "FEAT-305",
+      "category": "PRODUCT_NAMING",
+      "verified_assertion": "The core enterprise platform is branded 'InkSentinel by Inkloom AI' (formerly piloted under 'Inkloom Classic').",
+      "permitted_phrasing": ["InkSentinel", "Inkloom Pro", "InkSentinel Brand Governance"],
+      "banned_phrasing": ["Inkloom Classic", "Inkloom Old", "InkSentinel Classic"]
+    },
+    {
+      "fact_id": "PERF-402",
+      "category": "PERFORMANCE",
+      "verified_assertion": "Independent benchmark testing (Q3 2026) verified 99.95% API uptime and median response latency of 180ms for 2,000-word documents.",
+      "permitted_phrasing": ["99.95% verified uptime SLA", "sub-200ms median processing latency", "independently benchmarked"],
+      "banned_phrasing": ["#1 fastest platform globally", "zero latency", "100% uptime guaranteed", "fastest on earth"]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "analytics_window": "Last 90 Days",
+  "total_audits_analyzed": 1420,
+  "ambiguity_heatmap": [
+    {
+      "rule_id": "TONE-GOV-03",
+      "rule_title": "Enterprise Tone vs. Conversational Voice",
+      "infraction_count": 482,
+      "ambiguity_rate": 64.2,
+      "root_cause": "Creators struggle to balance 'approachable' with 'authoritative', leading to accidental slang.",
+      "suggested_guideline_rewrite": "Clarify with explicit positive/negative sentence pairs. Add: 'Use active verbs and plain language, but avoid conversational idioms, internet slang, and excessive punctuation.'"
+    },
+    {
+      "rule_id": "SEC-GOV-04",
+      "rule_title": "Absolute Security Superlatives",
+      "infraction_count": 314,
+      "ambiguity_rate": 48.7,
+      "root_cause": "Sales and growth teams conflate SOC-2 certification with 'unhackable' marketing language.",
+      "suggested_guideline_rewrite": "Explicitly mandate Fact Base citation: 'Never state that security is absolute or impenetrable. Always specify the exact compliance certification (e.g., SOC-2 Type II, ISO 27001).'"
+    },
+    {
+      "rule_id": "PRC-GOV-01",
+      "rule_title": "Deprecated Pricing Model Mentions",
+      "infraction_count": 218,
+      "ambiguity_rate": 31.0,
+      "root_cause": "Old agency templates still reference 2025 starter pricing sheets.",
+      "suggested_guideline_rewrite": "Issue automated template deprecation notice: 'All collateral citing $19/mo tiers must be updated to $29/mo Growth pricing. Remove legacy PDF decks from shared drives.'"
+    },
+    {
+      "rule_id": "VIS-GOV-02",
+      "rule_title": "WCAG 2.1 Contrast Thresholds on Social Assets",
+      "infraction_count": 194,
+      "ambiguity_rate": 27.5,
+      "root_cause": "Designers use muted secondary grays (#A0AEC0) on white cards for subtle aesthetics.",
+      "suggested_guideline_rewrite": "Provide approved dark token: 'Muted text on white backgrounds must use #4A5568 or darker to guarantee a minimum 4.5:1 contrast ratio under WCAG AA.'"
+    }
+  ]
+}
