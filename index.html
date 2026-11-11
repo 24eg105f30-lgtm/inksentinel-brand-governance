@@ -280,6 +280,9 @@
               <button onclick="runAudit()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold flex items-center gap-1 shadow-sm transition">
                 <i data-lucide="play" class="w-3.5 h-3.5"></i> Run Audit
               </button>
+              <button id="btn-ai-tone" onclick="runAiTone()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-fuchsia-600 to-indigo-600 text-white font-semibold flex items-center gap-1 shadow-sm transition hover:opacity-90">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> AI Tone Review
+              </button>
             </div>
           </div>
 
@@ -321,6 +324,11 @@
               </div>
               <p class="text-slate-400 text-[11px]">All personal names, emails, phone numbers, and secrets are redacted before external transit:</p>
               <div id="pii-sanitized-content" class="bg-slate-950 p-3 rounded text-slate-300 leading-relaxed font-mono"></div>
+            </div>
+
+            <!-- AI Tone Review Panel Drawer -->
+            <div id="ai-tone-panel" class="hidden absolute inset-4 bg-white/98 text-slate-800 p-4 rounded-lg text-xs overflow-y-auto space-y-2 z-10 custom-scrollbar border border-fuchsia-300 shadow-xl">
+              <!-- Rendered dynamically -->
             </div>
           </div>
 
@@ -1041,6 +1049,78 @@ Flexible subscriptions are available starting at $29/month with independently ve
       const text = document.getElementById('editor-text').value;
       const words = text.trim() ? text.trim().split(/\s+/).length : 0;
       document.getElementById('word-count').innerText = `${words} words`;
+    }
+
+    async function runAiTone() {
+      const panel = document.getElementById('ai-tone-panel');
+      const btn = document.getElementById('btn-ai-tone');
+      const text = document.getElementById('editor-text').value.trim();
+      panel.classList.remove('hidden');
+      if (!text) {
+        panel.innerHTML = `
+          <div class="flex justify-between items-center pb-2 border-b">
+            <span class="font-bold text-slate-700">AI Tone Review</span>
+            <button onclick="document.getElementById('ai-tone-panel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">[✕]</button>
+          </div>
+          <p class="text-sm text-slate-600 mt-2">Write or load some draft copy first.</p>
+        `;
+        return;
+      }
+      btn.disabled = true; btn.style.opacity = '.6';
+      panel.innerHTML = `
+        <div class="flex justify-between items-center pb-2 border-b">
+          <span class="font-bold text-fuchsia-700 flex items-center gap-1.5"><i data-lucide="sparkles" class="w-4 h-4"></i> Reviewing Tone with Gemini AI…</span>
+          <button onclick="document.getElementById('ai-tone-panel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">[✕]</button>
+        </div>
+        <p class="text-xs text-slate-500 mt-3 animate-pulse">Evaluating brand persona: authoritative yet approachable, concise, empathetic...</p>
+      `;
+      lucide.createIcons();
+      try {
+        const r = await fetch('/api/tone', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Request failed');
+        const col = d.verdict === 'on-brand' ? 'emerald' : d.verdict === 'needs-work' ? 'amber' : 'rose';
+        const issues = (d.issues || []).map(i => `
+          <li class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs">
+            <p class="text-rose-700 line-through">${escapeHtml(i.quote || '')}</p>
+            <p class="text-slate-600 mt-0.5">${escapeHtml(i.problem || '')}</p>
+            <p class="text-emerald-700 font-semibold mt-0.5">→ ${escapeHtml(i.rewrite || '')}</p>
+          </li>
+        `).join('');
+        panel.innerHTML = `
+          <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b">
+            <h3 class="font-bold text-slate-800 flex items-center gap-1.5 text-sm">
+              <i data-lucide="sparkles" class="w-4 h-4 text-fuchsia-600"></i> AI Tone Review
+            </h3>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-${col}-100 text-${col}-800">
+                ${escapeHtml(String(d.verdict || ''))} · ${Number(d.score) || 0}/100
+              </span>
+              <button onclick="document.getElementById('ai-tone-panel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">[✕]</button>
+            </div>
+          </div>
+          <p class="text-xs text-slate-700 mt-2">${escapeHtml(d.summary || '')}</p>
+          <ul class="space-y-2 mt-2">${issues || '<li class="text-xs text-slate-500">No tone issues found. Copy matches brand persona.</li>'}</ul>
+          <p class="text-[10px] text-slate-400 mt-2 pt-2 border-t">Advisory only. The deterministic rule engine and Fact Base remain the source of truth.</p>
+        `;
+      } catch (e) {
+        panel.innerHTML = `
+          <div class="flex justify-between items-center pb-2 border-b">
+            <span class="font-bold text-rose-700">AI Tone Review Notice</span>
+            <button onclick="document.getElementById('ai-tone-panel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">[✕]</button>
+          </div>
+          <p class="text-xs text-rose-700 font-semibold mt-2">${escapeHtml(e.message)}</p>
+          <p class="text-[11px] text-slate-500 mt-1">Tone review is an optional advisory LLM service. Deterministic rule audits, WCAG calculations, and hybrid fact retrieval work 100% natively without external API keys.</p>
+        `;
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        lucide.createIcons();
+      }
     }
 
     function toggleCredentialsModal() {
