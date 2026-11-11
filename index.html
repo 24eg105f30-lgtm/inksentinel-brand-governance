@@ -408,7 +408,7 @@
             <h2 class="text-lg font-extrabold">Deepened Visual & Accessibility Guard (OCR + Per-Region Contrast)</h2>
           </div>
           <p class="text-xs text-indigo-200 mt-1 max-w-3xl">
-            Solves visual compliance pre-publication: OCR locates every text bounding box in an uploaded creative, samples pixels directly behind it, computes mathematical WCAG 2.1 contrast formulas <code class="bg-indigo-950 px-1.5 py-0.5 rounded font-mono text-amber-300">(L1 + 0.05)/(L2 + 0.05)</code>, and checks all colors against the approved brand palette.
+            Automated pre-publication visual guard: OCR locates text blocks in marketing creatives, measures readability against background pixels, and validates color tokens against your approved brand palette.
           </p>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
@@ -462,28 +462,40 @@
         <!-- WCAG Contrast & Math Engine (5 cols) -->
         <div class="lg:col-span-5 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
               <h3 class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
-                <i data-lucide="calculator" class="w-4 h-4 text-indigo-600"></i> Selected Region Contrast & Math
+                <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i> Region Contrast & Legibility
               </h3>
               <span id="selected-region-name" class="text-[11px] font-mono text-indigo-600 font-bold">Region: Headline Text</span>
             </div>
 
-            <!-- Mathematical Formula Box -->
-            <div class="bg-slate-900 text-slate-100 p-3 rounded-lg font-mono text-xs mb-4">
-              <div class="text-[10px] text-slate-400 mb-1">WCAG 2.1 Luminance Contrast Formula:</div>
-              <div class="text-emerald-400 font-bold">Contrast = (L1 + 0.05) / (L2 + 0.05)</div>
-              <div class="text-[11px] text-slate-300 mt-2">
-                • L1 (Lighter): <span id="math-l1" class="text-amber-300 font-bold">1.0000</span><br>
-                • L2 (Darker, <span id="math-hex-code">#A0AEC0</span>): <span id="math-l2" class="text-amber-300 font-bold">0.4140</span>
+            <!-- Sleek Color Swatch Inspection Pair -->
+            <div class="grid grid-cols-2 gap-2 mb-3">
+              <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50 flex items-center gap-2.5">
+                <div id="swatch-text-preview" class="w-8 h-8 rounded-lg border border-slate-300 shadow-sm flex items-center justify-center font-bold text-xs" style="background-color: #A0AEC0; color: #FFFFFF;">
+                  Aa
+                </div>
+                <div>
+                  <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Text Color</span>
+                  <span id="math-hex-code" class="font-mono text-xs font-bold text-slate-800">#A0AEC0</span>
+                </div>
+              </div>
+              <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50 flex items-center gap-2.5">
+                <div id="swatch-bg-preview" class="w-8 h-8 rounded-lg border border-slate-300 shadow-sm flex items-center justify-center font-bold text-xs" style="background-color: #FFFFFF; color: #1e293b;">
+                  Bg
+                </div>
+                <div>
+                  <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Background</span>
+                  <span id="swatch-bg-hex" class="font-mono text-xs font-bold text-slate-800">#FFFFFF</span>
+                </div>
               </div>
             </div>
 
-            <!-- Calculated Ratio Gauge -->
+            <!-- Calculated Ratio Gauge Card -->
             <div class="p-4 rounded-xl border mb-4 transition-all duration-300" id="contrast-result-card" style="background-color: #FFF1F2; border-color: #FECDD3;">
               <div class="flex items-center justify-between">
                 <div>
-                  <span class="text-xs font-semibold text-slate-600">Computed Region Contrast</span>
+                  <span class="text-xs font-semibold text-slate-600">Measured Contrast Ratio</span>
                   <div class="text-3xl font-extrabold text-rose-700 mt-0.5" id="contrast-ratio-display">2.26 : 1</div>
                 </div>
                 <div class="text-right">
@@ -491,9 +503,23 @@
                   <div id="badge-wcag-aaa" class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-700">WCAG AAA: FAILS (Min 7.0:1)</div>
                 </div>
               </div>
-              <p id="contrast-explanation" class="text-xs text-rose-800 mt-2">
+
+              <!-- Sleek Progress Gauge Bar -->
+              <div class="w-full bg-slate-200/80 h-2 rounded-full overflow-hidden mt-3">
+                <div id="contrast-meter-fill" class="h-full rounded-full transition-all duration-500" style="width: 25%; background-color: #EF4444;"></div>
+              </div>
+
+              <p id="contrast-explanation" class="text-xs text-rose-800 mt-2.5 leading-relaxed">
                 This text block fails accessibility guidelines. Text contrast is only 2.26:1. Users with moderate visual impairments will struggle to read this copy.
               </p>
+
+              <!-- Optional Collapsed Technical Details -->
+              <details class="mt-2 text-[10px] text-slate-400 cursor-pointer pt-2 border-t border-slate-200/50">
+                <summary class="hover:text-slate-600 font-medium">Technical luminance specifications (ISO/IEC 40500)</summary>
+                <div class="mt-1 font-mono text-[10px] text-slate-500 bg-slate-100/80 p-2 rounded">
+                  L1 (Lighter): <span id="math-l1" class="font-bold text-slate-700">1.0000</span> | L2 (Darker): <span id="math-l2" class="font-bold text-slate-700">0.4140</span> | Method: Standard sRGB relative luminance
+                </div>
+              </details>
             </div>
 
             <!-- Brand Palette Conformity Guard -->
@@ -1710,6 +1736,28 @@ Flexible subscriptions are available starting at $29/month with independently ve
       document.getElementById('math-l2').innerText = contrast.l2;
       document.getElementById('math-hex-code').innerText = b.fg;
       document.getElementById('contrast-ratio-display').innerText = `${contrast.ratio} : 1`;
+
+      // Update swatch previews
+      const swatchText = document.getElementById('swatch-text-preview');
+      const swatchBg = document.getElementById('swatch-bg-preview');
+      const swatchBgHex = document.getElementById('swatch-bg-hex');
+      if (swatchText) {
+        swatchText.style.backgroundColor = b.fg;
+        swatchText.style.color = b.bg === '#FFFFFF' ? '#FFFFFF' : '#1e1b4b';
+      }
+      if (swatchBg) {
+        swatchBg.style.backgroundColor = b.bg;
+        swatchBg.style.color = b.bg === '#1E1B4B' ? '#FFFFFF' : '#1e1b4b';
+      }
+      if (swatchBgHex) swatchBgHex.innerText = b.bg;
+
+      // Animate progress meter
+      const meterFill = document.getElementById('contrast-meter-fill');
+      if (meterFill) {
+        const pct = Math.min(100, Math.max(12, (contrast.ratio / 12) * 100));
+        meterFill.style.width = `${pct}%`;
+        meterFill.style.backgroundColor = passesAA ? '#10B981' : '#EF4444';
+      }
 
       const card = document.getElementById('contrast-result-card');
       const ratioDisplay = document.getElementById('contrast-ratio-display');
