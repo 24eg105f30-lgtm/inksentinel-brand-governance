@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InkSentinel AI — Autonomous Brand Governance & Safety Platform (Round 3 The Finish)</title>
+  <title>InkSentinel AI — AI-Assisted Brand Governance & Safety Platform (Round 3 The Finish)</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -104,7 +104,7 @@
             <span class="font-extrabold text-xl sm:text-2xl leading-none tracking-tight text-white">InkSentinel AI</span>
             <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-full">Round 3 • The Finish</span>
           </div>
-          <p class="text-xs text-indigo-200/80 font-medium truncate mt-0.5">Autonomous Enterprise Brand Governance & Safety Platform</p>
+          <p class="text-xs text-indigo-200/80 font-medium truncate mt-0.5">AI-Assisted Enterprise Brand Governance & Safety Platform</p>
         </div>
       </div>
 
@@ -301,7 +301,7 @@
             <div id="pii-preview-drawer" class="hidden absolute inset-4 bg-slate-900 text-slate-100 p-4 rounded-lg font-mono text-xs overflow-y-auto space-y-2 z-20 custom-scrollbar border border-slate-700 shadow-2xl">
               <div class="flex items-center justify-between pb-2 border-b border-slate-700">
                 <span class="font-bold text-emerald-400 flex items-center gap-1">
-                  <i data-lucide="lock" class="w-3.5 h-3.5"></i> Client-Side Regex Sanitized Stream (Presidio-Style Pattern Rules)
+                  <i data-lucide="lock" class="w-3.5 h-3.5"></i> Client-Side Regex Sanitized Stream (Zero PII Leaves Browser)
                 </span>
                 <button onclick="togglePiiDrawer()" class="text-slate-400 hover:text-white text-xs px-2 py-0.5 rounded bg-slate-800">Close [✕]</button>
               </div>
@@ -605,7 +605,7 @@
         <div class="flex items-center justify-between">
           <div>
             <h3 class="font-bold text-sm text-slate-800">Enterprise Approved Fact Base (Ground Truth Source)</h3>
-            <p class="text-xs text-slate-500">All marketing copy and autonomous AI diff suggestions strictly draw assertions from these verified records.</p>
+            <p class="text-xs text-slate-500">All marketing copy and AI-assisted diff suggestions strictly draw assertions from these verified records.</p>
           </div>
           <div class="w-64">
             <input type="text" id="fact-search" oninput="filterFacts()" placeholder="Search fact IDs, assertions..." class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500">
@@ -1536,6 +1536,40 @@ Flexible subscriptions are available starting at $29/month with independently ve
       document.getElementById('stat-claims').innerText = claimsCount > 0 ? `${claimsCount} Unverified` : '0 Issues';
       document.getElementById('stat-specs').innerText = specsCount > 0 ? `${specsCount} Outdated` : '0 Issues';
       document.getElementById('stat-tone').innerText = toneCount > 0 ? `${toneCount} Warnings` : 'All Clear';
+
+      // Dynamically synchronize Reviewer Sign-Off tab status with live violations count
+      const certChecks = document.getElementById('cert-checks-summary');
+      const certBadge = document.getElementById('cert-status-badge');
+      const certHash = document.getElementById('cert-hash');
+
+      if (currentViolations.length > 0) {
+        if (certChecks) {
+          const clearedCount = Math.max(0, 6 - currentViolations.length);
+          certChecks.className = 'font-bold text-amber-600';
+          certChecks.innerText = `${clearedCount}/6 Guardrails Cleared (${currentViolations.length} Infraction(s) Pending Resolution)`;
+        }
+        if (certBadge && certBadge.innerText !== 'OFFICIALLY SIGNED & VERIFIED') {
+          certBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300';
+          certBadge.innerText = 'ACTION REQUIRED (INFRACTIONS PENDING)';
+        }
+        if (certHash && !certHash.innerText.startsWith('SHA256:')) {
+          certHash.className = 'text-slate-400 italic break-all';
+          certHash.innerText = 'Sign-Off Blocked: All 6 guardrails must be cleared before computing cryptographic hash';
+        }
+      } else {
+        if (certChecks) {
+          certChecks.className = 'font-bold text-emerald-600';
+          certChecks.innerText = '6/6 Guardrails Cleared (§1.3, §2.1, §3.4, §4.2, §4.5, §5.1) — Fully Compliant';
+        }
+        if (certBadge && certBadge.innerText !== 'OFFICIALLY SIGNED & VERIFIED') {
+          certBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800 border border-indigo-300';
+          certBadge.innerText = 'READY FOR REVIEWER SIGN-OFF';
+        }
+        if (certHash && !certHash.innerText.startsWith('SHA256:')) {
+          certHash.className = 'text-indigo-600 font-semibold break-all';
+          certHash.innerText = 'Ready to Generate: Click "Official Brand Sign-Off" to compute immutable SHA-256 digest';
+        }
+      }
 
       const container = document.getElementById('findings-container');
       if (currentViolations.length === 0) {
