@@ -301,7 +301,7 @@
             <div id="pii-preview-drawer" class="hidden absolute inset-4 bg-slate-900 text-slate-100 p-4 rounded-lg font-mono text-xs overflow-y-auto space-y-2 z-20 custom-scrollbar border border-slate-700 shadow-2xl">
               <div class="flex items-center justify-between pb-2 border-b border-slate-700">
                 <span class="font-bold text-emerald-400 flex items-center gap-1">
-                  <i data-lucide="lock" class="w-3.5 h-3.5"></i> Presidio Client-Side Sanitized Stream
+                  <i data-lucide="lock" class="w-3.5 h-3.5"></i> Client-Side Regex Sanitized Stream (Presidio-Style Pattern Rules)
                 </span>
                 <button onclick="togglePiiDrawer()" class="text-slate-400 hover:text-white text-xs px-2 py-0.5 rounded bg-slate-800">Close [✕]</button>
               </div>
@@ -645,12 +645,12 @@
               <h2 class="text-lg font-extrabold text-slate-800">Guideline Ambiguity Heatmap & Live Session Telemetry</h2>
             </div>
             <p class="text-xs text-slate-500 mt-1">
-              Inverts brand governance: rather than merely penalizing authors, InkSentinel aggregates infraction patterns to detect confusing company policies and autonomously generates executive guideline rewrites.
+              Inverts brand governance: rather than merely penalizing authors, InkSentinel aggregates infraction patterns to detect confusing company policies and suggests AI-assisted guideline rewrites (advisory only).
             </p>
           </div>
           <div class="flex items-center gap-2">
             <span id="ambiguity-telemetry-pill" class="text-xs font-mono px-2.5 py-1 bg-purple-50 text-purple-700 border border-purple-200 rounded font-bold">
-              1,420 Historical + 0 Live Session Audits
+              1,420 Simulated Historical + 0 Live Session Audits
             </span>
           </div>
         </div>
@@ -707,7 +707,7 @@
           </div>
           <div class="flex justify-between border-b border-slate-200 pb-2">
             <span class="text-slate-500">Cryptographic Digest (SHA-256):</span>
-            <span class="text-indigo-600 font-bold break-all" id="cert-hash">SHA256: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</span>
+            <span class="text-slate-500 italic break-all" id="cert-hash">Pending Reviewer Sign-Off (Click 'Official Brand Sign-Off' to compute)</span>
           </div>
           <div class="flex justify-between">
             <span class="text-slate-500">Brand Policy Guardrails Cleared:</span>
@@ -1038,6 +1038,11 @@ Flexible subscriptions are available starting at $29/month with independently ve
         { author: 'Marcus Vance (Reviewer)', text: 'Sarah, FTC Section 5 strictly bars "100% hack-proof". We must cite SOC-2 Type II and AES-256 instead.', time: '10 mins ago' }
       ]
     };
+    try {
+      const savedComments = localStorage.getItem('inksentinel_comments_store');
+      if (savedComments) commentsStore = JSON.parse(savedComments);
+    } catch (e) {}
+
     let signoffHistory = [
       {
         release_id: 'REL-2026-Q3-CORE',
@@ -1047,6 +1052,10 @@ Flexible subscriptions are available starting at $29/month with independently ve
         status: 'VERIFIED_COMPLIANT'
       }
     ];
+    try {
+      const savedHistory = localStorage.getItem('inksentinel_signoff_history');
+      if (savedHistory) signoffHistory = JSON.parse(savedHistory);
+    } catch (e) {}
 
     // --- INITIALIZATION ---
     window.onload = function() {
@@ -1697,6 +1706,9 @@ Flexible subscriptions are available starting at $29/month with independently ve
         text: input.value.trim(),
         time: 'Just now'
       });
+      try {
+        localStorage.setItem('inksentinel_comments_store', JSON.stringify(commentsStore));
+      } catch (e) {}
       renderAuditResults();
     }
 
@@ -2166,7 +2178,7 @@ Flexible subscriptions are available starting at $29/month with independently ve
     function updateAmbiguityTelemetry() {
       const pill = document.getElementById('ambiguity-telemetry-pill');
       if (pill) {
-        pill.innerText = `1,420 Historical + ${liveSessionAuditsCount} Live Session Audits`;
+        pill.innerText = `1,420 Simulated Historical + ${liveSessionAuditsCount} Live Session Audits`;
       }
     }
 
@@ -2224,6 +2236,9 @@ Flexible subscriptions are available starting at $29/month with independently ve
         status: 'VERIFIED_COMPLIANT'
       };
       signoffHistory.unshift(newRecord);
+      try {
+        localStorage.setItem('inksentinel_signoff_history', JSON.stringify(signoffHistory));
+      } catch (e) {}
       renderSignoffHistory();
 
       alert(`Official Brand Compliance Certificate Generated!\n\nCryptographic Fingerprint:\nSHA256: ${hash}\n\nSigner: ${reviewer}\nStatus: Approved for Production Deployment`);
